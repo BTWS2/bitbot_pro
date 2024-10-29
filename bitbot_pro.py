@@ -5,6 +5,7 @@
 
 from microbit import i2c, sleep
 import sys
+from utime import ticks_us, sleep_us
 
 # I2C address of the ATmega microcontroller on the BitBot Pro
 I2C_ATMEGA_ADDR = 0x22
@@ -131,3 +132,34 @@ def led_clear():
     """Clear all leds."""
     params = [MODE_AUTO, NUM_LEDS, 0, 0, 0]
     send_command(SETPIXEL, params)
+
+
+def get_distance_cm(pin):
+    pin.write_digital(1)  # Send 10us Ping pulse
+    sleep_us(10)
+    pin.write_digital(0)
+    pin.set_pull(pin.NO_PULL)
+    while pin.read_digital() == 0:  # ensure Ping pulse has cleared
+        pass
+    start = ticks_us()  # define starting time
+    while pin.read_digital() == 1:  # wait for Echo pulse to return
+        pass
+    end = ticks_us()  # define ending time
+    echo = end - start
+    distance = int(0.01715 * echo)  # Calculate cm distance
+    return distance
+
+
+def set_servo_angle(pin, angle):
+    # Ensure the angle is within the valid range
+    angle = clamp(angle, 0, 180)
+
+    # Map the angle to a duty cycle between 0.5 ms (0°) and 2.5 ms (180°)
+    # Corresponding to analog write values between 26 and 128
+    duty_cycle_min = 26  # 0.5 ms / 20 ms * 1023
+    duty_cycle_max = 128  # 2.5 ms / 20 ms * 1023
+    duty_cycle = int(duty_cycle_min + (angle / 180) * (duty_cycle_max - duty_cycle_min))
+
+    # Write the PWM signal to the servo
+    pin.set_analog_period(20)
+    pin.write_analog(duty_cycle)
