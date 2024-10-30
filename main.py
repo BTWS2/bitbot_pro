@@ -5,7 +5,7 @@ from time import sleep
 
 # Set global speed
 print("Setting speed to 50%")
-turtle.speed(50)
+turtle.speed(5)
 
 # Test moving forward
 print("Moving forward 20 cm")

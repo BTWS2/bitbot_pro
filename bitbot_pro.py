@@ -33,10 +33,15 @@ def clamp(value, min_value, max_value):
     return max(min_value, min(value, max_value))
 
 
-def speed(new_speed):
+def speed(new_speed=None):
     """Set the global speed for the robot."""
     global _speed
-    _speed = clamp(abs(int(new_speed)), 0, 100)
+    speeds = {"fast": 10, "normal": 6, "slow": 3, "slowest": 1}
+    if new_speed is None:
+        return _speed
+    if new_speed in speeds:
+        new_speed = speeds[new_speed]
+    _speed = clamp(abs(int(round(new_speed * 10))), 0, 100)
 
 
 def send_command(command, params):
