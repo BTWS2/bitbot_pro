@@ -28,6 +28,7 @@ MODE_AUTO = 1  # Only support for auto mode
 _speed = 60  # Default speed percentage (0-100)
 
 
+
 def clamp(value, min_value, max_value):
     """Clamps a value between a minimum and maximum value."""
     return max(min_value, min(value, max_value))
@@ -88,7 +89,7 @@ def forward(distance_cm):
     go_cm(_speed, distance_cm)
 
 
-def backward(distance_cm):
+def back(distance_cm):
     """Move the robot backward a specified distance in cm."""
     go_cm(-_speed, distance_cm)
 
@@ -168,3 +169,14 @@ def set_servo_angle(pin, angle):
     # Write the PWM signal to the servo
     pin.set_analog_period(20)
     pin.write_analog(duty_cycle)
+
+# Alias for compatibility with the turtle module
+fd = forward
+bk = back
+backward = back
+rt = right
+lt = left
+# position = pos
+# setpos = goto
+# setposition = goto
+# seth = setheading
