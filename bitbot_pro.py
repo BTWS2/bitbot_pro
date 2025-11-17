@@ -76,6 +76,14 @@ def wait_for_ack():
 
 
 def go_cm(speed, distance_cm):
+    # If int(distance_cm) == 0, robot moves indefinitely
+    if abs(distance_cm) < 1:
+        return
+    
+    # If distance is negative, reverse the speed
+    if distance_cm < 0:
+        speed = -speed
+
     distance_cm = abs(int(distance_cm))
     distance_low = distance_cm & 0xFF
     distance_high = (distance_cm >> 8) & 0xFF
@@ -95,6 +103,14 @@ def back(distance_cm):
 
 
 def spin_deg(speed, angle_deg):
+    # If int(angle_deg) == 0, robot spins indefinitely
+    if abs(angle_deg) < 1:
+        return
+    
+    # If angle is negative, reverse the speed
+    if angle_deg < 0:
+        speed = -speed
+
     angle_deg = abs(int(angle_deg))
     angle_low = angle_deg & 0xFF
     angle_high = (angle_deg >> 8) & 0xFF
