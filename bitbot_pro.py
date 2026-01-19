@@ -30,12 +30,16 @@ _speed = 60  # Default speed percentage (0-100)
 
 
 def clamp(value, min_value, max_value):
+    # type: (float|int, float|int, float|int) -> float|int
     """Clamps a value between a minimum and maximum value."""
+
     return max(min_value, min(value, max_value))
 
 
 def speed(new_speed=None):
+    # type: (float|int|None|str) -> float|int|None
     """Set the global speed for the robot."""
+
     global _speed
     speeds = {"fast": 10, "normal": 6, "slow": 3, "slowest": 1}
     if new_speed is None:
@@ -46,7 +50,9 @@ def speed(new_speed=None):
 
 
 def send_command(command, params):
+    # type: (int, list[int]) -> None
     """Sends a command with parameters to the robot via I2C."""
+
     # Prepare the data buffer
     data = bytearray([command] + [param & 0xFF for param in params])
     # Send the command to the microcontroller
@@ -59,7 +65,9 @@ def send_command(command, params):
 
 
 def wait_for_ack():
+    # type: () -> None
     """Waits for an acknowledgment from the robot indicating the command is complete."""
+
     while True:
         try:
             # Write the ACKNAK register address
@@ -76,6 +84,7 @@ def wait_for_ack():
 
 
 def go_cm(speed, distance_cm):
+    # type: (float|int, float|int) -> None
     """
     Moves the robot a specified distance in centimeters at a given speed.
     Parameters:
@@ -84,6 +93,7 @@ def go_cm(speed, distance_cm):
             - If the absolute value is less than 1, the function returns immediately and the robot does not move.
             - If distance_cm is negative, the robot moves in reverse.
     """
+
     # If int(distance_cm) == 0, robot moves indefinitely
     if abs(distance_cm) < 1:
         return
@@ -109,16 +119,21 @@ def go_cm(speed, distance_cm):
 
 
 def forward(distance_cm):
+    # type: (float|int) -> None
     """Move the robot forward a specified distance in cm."""
+
     go_cm(_speed, distance_cm)
 
 
 def back(distance_cm):
+    # type: (float|int) -> None
     """Move the robot backward a specified distance in cm."""
+
     go_cm(-_speed, distance_cm)
 
 
 def spin_deg(speed, angle_deg):
+    # type: (float|int, float|int) -> None
     """
     Spins the robot a specified angle in degrees at a given speed.
 
@@ -154,16 +169,21 @@ def spin_deg(speed, angle_deg):
 
 
 def left(angle_deg):
+    # type: (float|int) -> None
     """Spin the robot left a specified angle in degrees."""
+
     spin_deg(_speed, angle_deg)
 
 
 def right(angle_deg):
+    # type: (float|int) -> None
     """Spin the robot right a specified angle in degrees."""
+
     spin_deg(-_speed, angle_deg)
 
 
 def set_led_color(r, g, b):
+    # type: (int, int, int) -> None
     """Sets all LEDs to a given color.
     
     Parameters:
@@ -177,6 +197,7 @@ def set_led_color(r, g, b):
 
 
 def set_pixel_color(led_id, r, g, b):
+    # type: (int, int, int, int) -> None
     """Sets a single LED to a given color.
     
     Parameters:
@@ -195,6 +216,7 @@ def set_pixel_color(led_id, r, g, b):
 
 
 def set_led_brightness(brightness):
+    # type: (int) -> None
     """Sets the brightness of the LEDs.
     
     Parameters:
@@ -206,12 +228,15 @@ def set_led_brightness(brightness):
 
 
 def led_clear():
+    # type: () -> None
     """Clear all leds."""
+    
     params = [MODE_AUTO, NUM_LEDS, 0, 0, 0]
     send_command(SETPIXEL, params)
 
 
 def get_distance_cm(pin):
+    # type: (microbit.pin) -> int
     """
     Get a distance reading in centimeters from an ultrasonic sensor, 
     connected to the specified pin.
@@ -257,12 +282,13 @@ def get_distance_cm(pin):
 
 
 def set_servo_angle(pin, angle):
+    # type: (microbit.pin, float|int) -> None
     """
     Set the angle of a servo motor connected to the specified pin.
 
     Parameters:
         pin (microbit.pin): The microbit.pin object to which the servo is connected.
-        angle (int): The desired angle (0-180 degrees).
+        angle (float|int): The desired angle (0-180 degrees).
     """
 
     # Ensure the angle is within the valid range
