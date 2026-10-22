@@ -13,7 +13,7 @@
 
 ## Turtle documentation
 
-* [Online Python Turtle editor](https://trinket.io/turtle)
+* [Online Python Turtle editor](https://papyros.dodona.be/)
 * [Documentation of Python Turtle graphics](https://docs.python.org/3/library/turtle.html)
 * [Source code Python Turtle](https://github.com/python/cpython/blob/3.13/Lib/turtle.py)
 
